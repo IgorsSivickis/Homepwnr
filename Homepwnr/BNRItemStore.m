@@ -34,6 +34,12 @@
     return nil;
 }
 
+-(void)removeItem:(BNRItem *)item
+{
+    [self.privateItems removeObjectIdenticalTo:item];
+}
+
+
 -(instancetype)initPrivate
 {
     self = [super init];
