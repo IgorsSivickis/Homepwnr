@@ -9,6 +9,7 @@
 #import "BNRItemsViewController.h"
 #import "BNRItem.h"
 #import "BNRItemStore.h"
+#import "BNRDetailViewController.h"
 
 @interface BNRItemsViewController ()
 @property (nonatomic, strong) IBOutlet UIView *headerView;
@@ -47,6 +48,24 @@
     }
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.tableView reloadData];
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    BNRDetailViewController *detailViewController = [[BNRDetailViewController alloc] init];
+    
+    NSArray *items = [[BNRItemStore sharedStore] allItems];
+    BNRItem *selectedItem = items[indexPath.row];
+    detailViewController.item = selectedItem;
+    
+    [self.navigationController pushViewController:detailViewController animated:YES];
+}
+
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete){
@@ -57,6 +76,11 @@
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 
     }
+}
+
+-(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    [[BNRItemStore sharedStore]moveItemAtIndex:sourceIndexPath.row toIndex:destinationIndexPath.row];
 }
 
 -(UIView *)headerView
