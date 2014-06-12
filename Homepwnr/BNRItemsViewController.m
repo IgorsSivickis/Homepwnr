@@ -12,7 +12,6 @@
 #import "BNRDetailViewController.h"
 
 @interface BNRItemsViewController ()
-@property (nonatomic, strong) IBOutlet UIView *headerView;
 @end
 
 @implementation BNRItemsViewController
@@ -21,9 +20,17 @@
 {
     self = [super initWithStyle:UITableViewStylePlain];
     if (self){
-//        for (int i = 0; i<5; i++){
-//            [[BNRItemStore sharedStore] createItem];
-//        }
+        UINavigationItem *navItem = self.navigationItem;
+        navItem.title = @"Homepwner";
+        
+        UIBarButtonItem *bbi = [[UIBarButtonItem alloc]
+                                initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                target:self
+                                action:@selector(addNewItem:)];
+        navItem.rightBarButtonItem = bbi;
+        
+        navItem.leftBarButtonItem = self.editButtonItem;
+
     }
     return  self;
 }
@@ -37,22 +44,12 @@
     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
 }
 
--(IBAction)toggleEditingMode:(id)sender
-{
-    if (self.editing){
-        [sender setTitle:@"Edit" forState:UIControlStateNormal];
-        [self setEditing:NO animated:YES];
-    }else{
-        [sender setTitle:@"Done" forState:UIControlStateNormal];
-        [self setEditing:YES animated:YES];
-    }
-}
-
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
     [self.tableView reloadData];
+    
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -83,22 +80,11 @@
     [[BNRItemStore sharedStore]moveItemAtIndex:sourceIndexPath.row toIndex:destinationIndexPath.row];
 }
 
--(UIView *)headerView
-{
-    if (!_headerView){
-        [[NSBundle mainBundle] loadNibNamed:@"HeaderView"
-                                      owner:self
-                                    options:nil];
-    }
-    return _headerView;
-}
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
-    UIView *header = self.headerView;
-    [self.tableView setTableHeaderView:header];
 }
 
 -(instancetype)initWithStyle:(UITableViewStyle)style
