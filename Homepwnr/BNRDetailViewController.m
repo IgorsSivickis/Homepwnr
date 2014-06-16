@@ -10,13 +10,16 @@
 #import "BNRItem.h"
 #import "BNRImageStore.h"
 
-@interface BNRDetailViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate>
+@interface BNRDetailViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate,UIPopoverControllerDelegate>
+
+@property (strong, nonatomic) UIPopoverController *imagePickerPopover;
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
 @property (weak, nonatomic) IBOutlet UITextField *serialNumberField;
 @property (weak, nonatomic) IBOutlet UITextField *valueField;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraButton;
 
 @end
 
@@ -38,7 +41,15 @@
     }
     imagePicker.delegate = self;
     
-    [self presentViewController:imagePicker animated:YES completion:nil];
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        self.imagePickerPopover = [[UIPopoverController alloc] initWithContentViewController:imagePicker];
+        self.imagePickerPopover.delegate = self;
+        [self.imagePickerPopover presentPopoverFromBarButtonItem:sender
+                                        permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                        animated:YES];
+    }else{
+        [self presentViewController:imagePicker animated:YES completion:nil];
+    }
 }
 
 -(void)viewDidLoad
@@ -50,6 +61,29 @@
     iv.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:iv];
     self.imageView = iv;
+    
+    [self.imageView setContentHuggingPriority:200
+                                      forAxis:UILayoutConstraintAxisVertical];
+    
+    [self.imageView setContentCompressionResistancePriority:700
+                                                    forAxis:UILayoutConstraintAxisVertical];
+    
+    NSDictionary *nameMap = @{@"imageView":self.imageView,
+                              @"dateLabel":self.dateLabel,
+                              @"toolbar":self.toolbar};
+    
+    NSArray *horizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[imageView]-0-|"
+                                                                             options:0
+                                                                             metrics:nil
+                                                                               views:nameMap];
+    
+    NSArray *verticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[dateLabel]-[imageView]-[toolbar]"
+                                                                             options:0
+                                                                             metrics:nil
+                                                                               views:nameMap];
+    
+    [self.view addConstraints:horizontalConstraints];
+    [self.view addConstraints:verticalConstraints];
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
@@ -62,9 +96,31 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+-(void)prepareViewsForOrientation:(UIInterfaceOrientation)orientation
+{
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        return;
+    }
+    if (UIInterfaceOrientationIsLandscape(orientation)) {
+        self.imageView.hidden = YES;
+        self.cameraButton.enabled = NO;
+    }else{
+        self.imageView.hidden = NO;
+        self.cameraButton.enabled = YES;
+    }
+}
+
+-(void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [self prepareViewsForOrientation:toInterfaceOrientation];
+}
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    UIInterfaceOrientation io = [[UIApplication sharedApplication]statusBarOrientation];
+    [self prepareViewsForOrientation:io];
     
     BNRItem *item = self.item;
     
