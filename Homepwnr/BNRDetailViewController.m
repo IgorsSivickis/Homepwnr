@@ -41,6 +41,17 @@
     [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    UIImageView *iv = [[UIImageView alloc] initWithImage:nil];
+    iv.contentMode = UIViewContentModeScaleAspectFit;
+    iv.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:iv];
+    self.imageView = iv;
+}
+
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
