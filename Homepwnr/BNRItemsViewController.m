@@ -40,8 +40,14 @@
     BNRItem *newItem = [[BNRItemStore sharedStore]createItem];
     BNRDetailViewController *detailViewController = [[BNRDetailViewController alloc] initForNewItem:YES];
     detailViewController.item = newItem;
+    detailViewController.dismissBlock = ^{
+        [self.tableView reloadData];
+    };
+    
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
-    [self presentViewController:navController animated:YES completion:nil];
+
+    navController.modalPresentationStyle = UIModalPresentationFormSheet;
+   [self presentViewController:navController animated:YES completion:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated
