@@ -11,8 +11,11 @@
 #import "BNRItemStore.h"
 #import "BNRDetailViewController.h"
 #import "BNRItemCell.h"
+#import "BNRImageStore.h"
+#import "BNRImageViewController.h"
 
-@interface BNRItemsViewController ()
+@interface BNRItemsViewController () <UIPopoverControllerDelegate>
+@property (nonatomic, strong) UIPopoverController *imagePopover;
 @end
 
 @implementation BNRItemsViewController
@@ -105,6 +108,11 @@
     return [[[BNRItemStore sharedStore]allItems] count];
 }
 
+-(void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+{
+    self.imagePopover = nil;
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     BNRItemCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BNRItemCell"
@@ -114,6 +122,31 @@
     cell.nameLabel.text = item.itemName;
     cell.serialNumberLabel.text = item.serialNumber;
     cell.valueLabel.text = [NSString stringWithFormat:@"%d", item.valueInDollars];
+    cell.thumbnailView.image = item.thumbnail;
+
+    cell.actionBlock = ^{
+        NSLog(@"Going to show image for %@",item);
+
+        if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+            NSString *itemKey = item.itemKey;
+
+            UIImage *img = [[BNRImageStore sharedStore]imageForKey:itemKey];
+            if (!img) {
+                return;
+            }
+            CGRect rect = [self.view convertRect:cell.thumbnailView.bounds fromView:cell.thumbnailView];
+            BNRImageViewController *ivc = [[BNRImageViewController alloc]init];
+            ivc.image = img;
+
+            self.imagePopover = [[UIPopoverController alloc] initWithContentViewController:ivc];
+            self.imagePopover.delegate = self;
+            self.imagePopover.popoverContentSize = CGSizeMake(600, 600);
+            [self.imagePopover presentPopoverFromRect:rect
+                                               inView:self.view
+                             permittedArrowDirections:UIPopoverArrowDirectionAny
+                                             animated:YES];
+        }
+    };
     
     return  cell;
 }

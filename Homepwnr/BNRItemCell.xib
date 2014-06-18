@@ -47,17 +47,35 @@
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kg0-HP-Gcz">
+                        <rect key="frame" x="0.0" y="2" width="40" height="40"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <state key="normal">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="showImage:" destination="Bld-Rm-PVV" eventType="touchUpInside" id="Ujg-1A-HWL"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="AlA-b4-HHS" firstAttribute="top" secondItem="SAg-Bq-9Vp" secondAttribute="top" constant="22" id="0Xm-CD-9Ec"/>
                     <constraint firstItem="CQe-9c-AAR" firstAttribute="top" secondItem="SAg-Bq-9Vp" secondAttribute="top" constant="1" id="5Pt-E8-V7S"/>
+                    <constraint firstItem="e3k-i0-Sgs" firstAttribute="top" secondItem="kg0-HP-Gcz" secondAttribute="top" id="6Ll-Hm-su4"/>
+                    <constraint firstItem="e3k-i0-Sgs" firstAttribute="trailing" secondItem="kg0-HP-Gcz" secondAttribute="trailing" id="6M6-4L-aXk"/>
+                    <constraint firstItem="e3k-i0-Sgs" firstAttribute="leading" secondItem="kg0-HP-Gcz" secondAttribute="leading" id="7YJ-UZ-asH"/>
+                    <constraint firstItem="e3k-i0-Sgs" firstAttribute="leading" secondItem="kg0-HP-Gcz" secondAttribute="leading" id="85I-hU-NZ3"/>
                     <constraint firstItem="e3k-i0-Sgs" firstAttribute="leading" secondItem="SAg-Bq-9Vp" secondAttribute="leading" id="9ij-1e-3w0"/>
+                    <constraint firstItem="e3k-i0-Sgs" firstAttribute="top" secondItem="kg0-HP-Gcz" secondAttribute="top" id="CMV-wb-cUr"/>
                     <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="CQe-9c-AAR" secondAttribute="bottom" constant="20" id="Gya-ma-yFW"/>
                     <constraint firstItem="AlA-b4-HHS" firstAttribute="leading" secondItem="e3k-i0-Sgs" secondAttribute="trailing" constant="8" id="U2F-YM-6z3"/>
                     <constraint firstAttribute="trailing" secondItem="Ifb-ce-gIX" secondAttribute="trailing" constant="20" id="WbF-AZ-m0l"/>
+                    <constraint firstItem="e3k-i0-Sgs" firstAttribute="bottom" secondItem="kg0-HP-Gcz" secondAttribute="bottom" id="bYi-56-RiT"/>
                     <constraint firstAttribute="bottom" secondItem="AlA-b4-HHS" secondAttribute="bottom" id="ew4-bd-33E"/>
+                    <constraint firstItem="e3k-i0-Sgs" firstAttribute="bottom" secondItem="kg0-HP-Gcz" secondAttribute="bottom" id="hew-DL-Kra"/>
                     <constraint firstItem="Ifb-ce-gIX" firstAttribute="leading" secondItem="CQe-9c-AAR" secondAttribute="trailing" constant="8" id="iHo-b8-j7N"/>
                     <constraint firstAttribute="centerY" secondItem="Ifb-ce-gIX" secondAttribute="centerY" id="n6R-RH-bH5"/>
+                    <constraint firstItem="e3k-i0-Sgs" firstAttribute="trailing" secondItem="kg0-HP-Gcz" secondAttribute="trailing" id="p1c-3g-oTu"/>
                     <constraint firstItem="CQe-9c-AAR" firstAttribute="leading" secondItem="e3k-i0-Sgs" secondAttribute="trailing" constant="8" id="t9z-rf-2SE"/>
                     <constraint firstItem="Ifb-ce-gIX" firstAttribute="leading" secondItem="AlA-b4-HHS" secondAttribute="trailing" constant="8" id="uuq-D6-4MD"/>
                     <constraint firstAttribute="centerY" secondItem="e3k-i0-Sgs" secondAttribute="centerY" constant="-0.5" id="v8G-8w-FoT"/>
